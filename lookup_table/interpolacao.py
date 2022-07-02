@@ -88,18 +88,22 @@ def getField(u, v):
 def uv_to_yx(u, v):
     field = getField(u, v)
     D = []
-    for i in range(len(fields[field])):
+    for i in range(4):
         D.append([fields[field][i].u, fields[field][i].v, (fields[field][i].u * fields[field][i].v), 1])
+    print(D)
     #Encontrando as constantes para x, por Cramer:
     Dc = D
     Dd = D
     De = D
     Df = D
-    for i in range(len(fields[field])):
-        Dc[0][i] = fields[field][i].x
-        Dd[1][i] = fields[field][i].x
-        De[2][i] = fields[field][i].x
-        Df[3][i] = fields[field][i].x
+    print(Dc)
+    for i in range(4):
+        Dc[i][0] = fields[field][i].x
+        print(Dc)
+        Dd[i][1] = fields[field][i].x
+        De[i][2] = fields[field][i].x
+        Df[i][3] = fields[field][i].x
+    print(Dc)
     cx = (np.linalg.det(Dc)/np.linalg.det(D))
     dx = (np.linalg.det(Dd)/np.linalg.det(D))
     ex = (np.linalg.det(De)/np.linalg.det(D))
@@ -109,11 +113,11 @@ def uv_to_yx(u, v):
     Dd = D
     De = D
     Df = D
-    for i in range(len(fields[field])):
-        Dc[0][i] = fields[field][i].y
-        Dd[1][i] = fields[field][i].y
-        De[2][i] = fields[field][i].y
-        Df[3][i] = fields[field][i].y
+    for i in range(4):
+        Dc[i][0] = fields[field][i].y
+        Dd[i][1] = fields[field][i].y
+        De[i][2] = fields[field][i].y
+        Df[i][3] = fields[field][i].y
     cy = (np.linalg.det(Dc)/np.linalg.det(D))
     dy = (np.linalg.det(Dd)/np.linalg.det(D))
     ey = (np.linalg.det(De)/np.linalg.det(D))
