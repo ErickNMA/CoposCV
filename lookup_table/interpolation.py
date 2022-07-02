@@ -1,4 +1,6 @@
 import numpy as np
+import copy
+import matplotlib.pyplot as plt
 
 class point:
     def __init__(self, a, b, c, d):
@@ -85,39 +87,37 @@ def getField(u, v):
         if((u >= u_min) and (u <= u_max) and (v >= v_min) and (v <= v_max)):
             return (i+1)
 
-def uv_to_yx(u, v):
+def uv_to_xy(u, v):
     field = getField(u, v)
+    if(field == None):
+        return (None, None)
     D = []
     for i in range(4):
-        D.append([fields[field][i].u, fields[field][i].v, (fields[field][i].u * fields[field][i].v), 1])
-    print(D)
+        D.append([fields[field-1][i].u, fields[field-1][i].v, (fields[field-1][i].u * fields[field-1][i].v), 1])
     #Encontrando as constantes para x, por Cramer:
-    Dc = D
-    Dd = D
-    De = D
-    Df = D
-    print(Dc)
+    Dc = copy.deepcopy(D)
+    Dd = copy.deepcopy(D)
+    De = copy.deepcopy(D)
+    Df = copy.deepcopy(D)
     for i in range(4):
-        Dc[i][0] = fields[field][i].x
-        print(Dc)
-        Dd[i][1] = fields[field][i].x
-        De[i][2] = fields[field][i].x
-        Df[i][3] = fields[field][i].x
-    print(Dc)
+        Dc[i][0] = fields[field-1][i].x
+        Dd[i][1] = fields[field-1][i].x
+        De[i][2] = fields[field-1][i].x
+        Df[i][3] = fields[field-1][i].x
     cx = (np.linalg.det(Dc)/np.linalg.det(D))
     dx = (np.linalg.det(Dd)/np.linalg.det(D))
     ex = (np.linalg.det(De)/np.linalg.det(D))
     fx = (np.linalg.det(Df)/np.linalg.det(D))
     #Encontrando as constantes para y, por Cramer:
-    Dc = D
-    Dd = D
-    De = D
-    Df = D
+    Dc = copy.deepcopy(D)
+    Dd = copy.deepcopy(D)
+    De = copy.deepcopy(D)
+    Df = copy.deepcopy(D)
     for i in range(4):
-        Dc[i][0] = fields[field][i].y
-        Dd[i][1] = fields[field][i].y
-        De[i][2] = fields[field][i].y
-        Df[i][3] = fields[field][i].y
+        Dc[i][0] = fields[field-1][i].y
+        Dd[i][1] = fields[field-1][i].y
+        De[i][2] = fields[field-1][i].y
+        Df[i][3] = fields[field-1][i].y
     cy = (np.linalg.det(Dc)/np.linalg.det(D))
     dy = (np.linalg.det(Dd)/np.linalg.det(D))
     ey = (np.linalg.det(De)/np.linalg.det(D))
@@ -126,7 +126,21 @@ def uv_to_yx(u, v):
     x = ((cx*u) + (dx*v) + (ex*u*v) + fx)
     y = ((cy*u) + (dy*v) + (ey*u*v) + fy)
 
-    return (x, y)
+    return (round(x, 1), round(y, 1))
 
+xreal = []
+yreal = []
+xcalc = []
+ycalc = []
 
-print(uv_to_yx(129.5, 224.5))
+for i in range(len(table)):
+    for j in range(len(table[0])):
+        xreal.append(table[i][j].x)
+        yreal.append(table[i][j].y)
+        (kx, ky) = uv_to_xy(table[i][j].u, table[i][j].v)
+        xcalc.append(kx)
+        ycalc.append(ky)
+
+plt.scatter(yreal, xreal, color='blue', linewidths=5)
+plt.scatter(ycalc, xcalc, color='red', linewidths=1)
+plt.show()
