@@ -1,4 +1,4 @@
-with open('static(2,4).txt', 'r') as file:
+with open('static(0,3).txt', 'r') as file:
         texto = file.readlines()
 
 u_med = 0
