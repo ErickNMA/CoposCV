@@ -16,7 +16,7 @@ import numpy as np
  """
 
 #Resolucao de captura:
-webcam = cv.VideoCapture(0, cv.CAP_V4L2)
+webcam = cv.VideoCapture(1, cv.CAP_V4L2)
 webcam.set(cv.CAP_PROP_FRAME_WIDTH, 1150)
 webcam.set(cv.CAP_PROP_FRAME_HEIGHT, 1150)
 webcam.set(cv.CAP_PROP_FPS, 10)
@@ -97,7 +97,11 @@ while (True):
                 cv.circle(frame, destino, int(circles[0][0][2]), (255, 0, 0), 2)
                 cv.circle(frame, alvo, int(circles[0][1][2]), (0, 0, 255), 2)
 
-            print('\n=> ALVO: \t' + str(round(alvo[0], 1)) + '\t' + str(round(alvo[1], 1)))
+            u = round(alvo[0],1)
+            v = round(alvo[1],1)
+            x = np.sum(np.array([ 1.46597571e+03,  1.31243271e-01, -8.22592943e-01, -1.21769489e-04, -1.74839687e-03,  9.58774954e-05])*np.array([1,u,v,u**2,v**2,u*v]))
+            y = np.sum(np.array([ 5.21405242e+02, -1.26623726e+00,  4.74633446e-01,  1.81918022e-05, -1.08157031e-04, -1.22588526e-03])*np.array([1,u,v,u**2,v**2,u*v]))
+            print("%+.1f   %+.1f   %+.1f   %+.1f" % (u,v,x,y))
         #print('\n=> DESTINO: ' + str(round(destino[0], 1)) + '\t' + str(round(destino[1], 1)))
         
         """ (x, y) = interpolation.uv_to_xy(alvo[0], alvo[1])
