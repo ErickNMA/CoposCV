@@ -45,8 +45,9 @@ while (True):
     med_dest_x.clear()
     med_dest_y.clear()
     m = 0
-    #for l in range(50):
-    while(True):
+    lista_x = []
+    lista_y = []
+    for l in range(10):
 
         #Obter imagem:
         ret, frame = webcam.read()
@@ -97,11 +98,14 @@ while (True):
                 cv.circle(frame, destino, int(circles[0][0][2]), (255, 0, 0), 2)
                 cv.circle(frame, alvo, int(circles[0][1][2]), (0, 0, 255), 2)
 
-            u = round(alvo[0],1)
-            v = round(alvo[1],1)
+            u = round( (alvo[0] + roi[0])/2 , 1)
+            v = round( (alvo[1] + roi[1])/2 , 1)
             x = np.sum(np.array([ 1.46597571e+03,  1.31243271e-01, -8.22592943e-01, -1.21769489e-04, -1.74839687e-03,  9.58774954e-05])*np.array([1,u,v,u**2,v**2,u*v]))
             y = np.sum(np.array([ 5.21405242e+02, -1.26623726e+00,  4.74633446e-01,  1.81918022e-05, -1.08157031e-04, -1.22588526e-03])*np.array([1,u,v,u**2,v**2,u*v]))
-            print("%+.1f   %+.1f   %+.1f   %+.1f" % (u,v,x,y))
+            #print("%+.1f   %+.1f   %+.1f   %+.1f" % (u,v,x,y))
+            lista_x.append(x)
+            lista_y.append(y)
+        
         #print('\n=> DESTINO: ' + str(round(destino[0], 1)) + '\t' + str(round(destino[1], 1)))
         
         """ (x, y) = interpolation.uv_to_xy(alvo[0], alvo[1])
@@ -126,7 +130,11 @@ while (True):
 
         cv.imshow("Output", frame)
         cv.waitKey(30)
-    
+    if len(lista_x) !=0:
+        x = sum(lista_x) / len(lista_x)
+        y = sum(lista_y) / len(lista_y)
+        print("%+.2f   %+.2f" % (x,y))
+
     """ for k in range(50):
         medax = medax + med_alvo_x[k]
         meday = meday + med_alvo_y[k]
