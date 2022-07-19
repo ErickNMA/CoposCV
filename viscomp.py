@@ -90,16 +90,37 @@ while (True):
             if(r1 > r2):
                 alvo = [int(circles[0][0][0]), int(circles[0][0][1])]
                 destino = [int(circles[0][1][0]), int(circles[0][1][1])]
-                cv.circle(frame, alvo, int(circles[0][0][2]), (0, 0, 255), 2)
-                cv.circle(frame, destino, int(circles[0][1][2]), (255, 0, 0), 2)
+                cv.circle(frame, alvo, 5, (0, 0, 255), 2)
+                #cv.circle(frame, destino, int(circles[0][1][2]), (255, 0, 0), 2)
             else:
                 alvo = [int(circles[0][1][0]), int(circles[0][1][1])]
                 destino = [int(circles[0][0][0]), int(circles[0][0][1])]
-                cv.circle(frame, destino, int(circles[0][0][2]), (255, 0, 0), 2)
-                cv.circle(frame, alvo, int(circles[0][1][2]), (0, 0, 255), 2)
+                #cv.circle(frame, destino, int(circles[0][0][2]), (255, 0, 0), 2)
+                cv.circle(frame, alvo, 5, (0, 0, 255), 2)
+            
+            uk = alvo[0]# + roi[0]
+            vk = alvo[1]# + roi[1]
 
-            u = round( (alvo[0] + roi[0])/2 , 1)
-            v = round( (alvo[1] + roi[1])/2 , 1)
+            list_u = []
+            list_v = []
+            for i in range(int(uk)-100,int(uk)+100):
+                for j in range(int(vk)-100,int(vk)+100):
+                    try:
+                        if (bin[j][i] == 255):
+                            list_u.append(i)
+                            list_v.append(j)
+                    except: 
+                        pass
+            
+            if len(list_u) !=0:
+                uk = sum(list_u) / len(list_u)
+                vk = sum(list_v) / len(list_v)
+                print(round(uk,1), round(vk,1))
+
+            cv.circle(frame, [int(uk),int(vk)], 5, (0, 255, 255), 2)
+
+            u = round( (uk+ roi[0])/2 , 1)
+            v = round( (vk+ roi[1])/2 , 1)
             x = np.sum(np.array([ 1.46597571e+03,  1.31243271e-01, -8.22592943e-01, -1.21769489e-04, -1.74839687e-03,  9.58774954e-05])*np.array([1,u,v,u**2,v**2,u*v]))
             y = np.sum(np.array([ 5.21405242e+02, -1.26623726e+00,  4.74633446e-01,  1.81918022e-05, -1.08157031e-04, -1.22588526e-03])*np.array([1,u,v,u**2,v**2,u*v]))
             #print("%+.1f   %+.1f   %+.1f   %+.1f" % (u,v,x,y))
