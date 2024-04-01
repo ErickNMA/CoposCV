@@ -43,15 +43,23 @@ def find_xy(uk, vk):
 
 #Resolucao de captura:
 webcam = cv.VideoCapture(1, cv.CAP_V4L2)
-webcam.set(cv.CAP_PROP_FRAME_WIDTH, 1150)
-webcam.set(cv.CAP_PROP_FRAME_HEIGHT, 1150)
+webcam.set(cv.CAP_PROP_FRAME_WIDTH, 1200)
+webcam.set(cv.CAP_PROP_FRAME_HEIGHT, 1200)
 webcam.set(cv.CAP_PROP_FPS, 10)
 
 #Identificando a mesa:
 ret, frame = webcam.read()
+
+# Crop image
+#roi = (300, 300, 400, 400)
+#frame = frame[int(roi[1]):int(roi[1]+roi[3]), int(roi[0]):int(roi[0]+roi[2])]
+
 #roi = cv.selectROI("imgName", frame, False, False)
 #print(roi)
-roi = (108, 351, 1348, 510)
+
+#roi = (125, 260, 572, 198)
+
+roi = (255, 520, 1135, 395)
 
 while (True):
     m = 0
@@ -66,6 +74,7 @@ while (True):
 
         #Conversao para tons de cinza:
         gray_image = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
+        cv.imshow("Escala de Cinza", gray_image)
 
         #Aplicando brilho e contraste:
         alpha = 1
@@ -80,6 +89,7 @@ while (True):
         bin = image.copy()
         bin[bin > T] = 255
         bin[bin < 255] = 0
+        cv.imshow("bin", bin)
 
         #Aplicacao da transformada de Rough:
         circles = cv.HoughCircles(bin,cv.HOUGH_GRADIENT,2,80,param1=1200,param2=3,minRadius=35,maxRadius=55)
